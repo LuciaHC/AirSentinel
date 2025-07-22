@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Final</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body>
+    <div class="container animate__animated animate__fadeIn">
+        <!-- Logo -->
+        <div class="logo">
+            <i class="fas fa-car-battery"></i> <span>SmartCar Control</span>
+        </div>
+
+        <!-- Sección 1: Título y subtítulo -->
+        <div class="section bordered">
+            <h1><i class="fas fa-microchip"></i> Conexión con el Robot</h1>
+            <h3>Proyecto Final Sistemas Electrónicos</h3>
+            <p><i class="fas fa-user-graduate"></i> Beatriz Otero Casanovas y Lucía Herraiz Cano</p>
+        </div>
+        
+        <!-- Sección 2: Botones de encendido/apagado -->
+        <div class="section bordered">
+            <h2><i class="fas fa-sliders-h"></i> Selección de características</h2>
+            <button class="button on" onclick="on_off('on')"><i class="fas fa-power-off"></i> ON</button>
+            <button class="button off" onclick="on_off('off')"><i class="fas fa-power-off"></i> OFF</button>
+            <br><br>
+            <p id="current-speed"><i class="fas fa-tachometer-alt"></i> Velocidad actual: 20 m/s</p>
+            <label for="speed">Selecciona una velocidad:</label>
+            <select name="speed" id="speed">
+                <option value="0">0</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+            </select>
+            <button class="button on" onclick="change_velocity()">Enviar</button>
+        </div>
+        
+        <!-- Sección 3: Dirección -->
+        <div class="section control-container bordered">
+            <h2><i class="fas fa-compass"></i> Control de dirección</h2>
+            <button class="button manual" onclick="mode('manual')"><i class="fas fa-hand-pointer"></i> Modo Manual</button>
+            <button class="button automatic" onclick="mode('automatic')"><i class="fas fa-robot"></i> Modo Automático</button>
+            <div class="control-grid">
+                <button class="arrow-button" onclick="direction('ARRIBA')" style="grid-column: 2; grid-row: 1;">▲</button>
+                <button class="arrow-button" onclick="direction('IZQUIERDA')" style="grid-column: 1; grid-row: 2;">◀</button>
+                <button class="arrow-button" onclick="direction('DERECHA')" style="grid-column: 3; grid-row: 2;">▶</button>
+                <button class="arrow-button" onclick="direction('ABAJO')" style="grid-column: 2; grid-row: 3;">▼</button>
+            </div>
+        </div>
+
+        <!-- Sección de mensajes -->
+        <div id="message-container" class="section bordered">
+            <h2><i class="fas fa-comment-dots"></i> Mensajes</h2>
+            <p id="response-message"></p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script type="text/javascript">
+        var socket = io();
+
+        socket.on('connect', function() {
+            console.log('Connected to WebSocket');
+        });
+
+        socket.on('disconnect', function() {
+            console.log('Disconnected from WebSocket');
+        });
+
+        function mode(state) {
+            socket.emit('mode', state);
+        };
+
+        function on_off(state) {
+            socket.emit('on_off', state);
+        };
+
+        function direction(state) {
+            socket.emit('direction', state);
+        };
+
+        function change_velocity() {
+            const value = document.getElementById('speed').value;
+            socket.emit('change_velocity', value);
+        };
+
+        socket.on('velocity_response', function(data) {
+            const messageContainer = document.getElementById('response-message');
+            const currentSpeedContainer = document.getElementById('current-speed');
+
+            messageContainer.style.color = data.status === 'success' ? 'green' : 'red';
+            messageContainer.textContent = data.message;
+            currentSpeedContainer.textContent = `Velocidad actual: ${data.current_speed} m/s`;
+        });
+
+        socket.on('on_off_response', function(data) {
+            const messageContainer = document.getElementById('response-message');
+            const currentSpeedContainer = document.getElementById('current-speed');
+
+            messageContainer.style.color = data.status === 'success' ? 'green' : 'red';
+            messageContainer.textContent = data.message;
+            currentSpeedContainer.textContent = `Velocidad actual: ${data.current_speed} m/s`;
+        });
+
+        socket.on('mode_response', function(data) {
+            const messageContainer = document.getElementById('response-message');
+
+            messageContainer.style.color = data.status === 'success' ? 'green' : 'red';
+            messageContainer.textContent = data.message;
+        });
+
+        socket.on('direction_response', function(data) {
+            const messageContainer = document.getElementById('response-message');
+            messageContainer.style.color = data.status === 'success' ? 'green' : 'red';
+            messageContainer.textContent = data.message;
+        });
+    </script>
+</body>
+</html>
