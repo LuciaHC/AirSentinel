@@ -85,6 +85,6 @@ The project is divided in the following modules:
 
 ---
 
-## 📄 <span id="license">License>/span>
+## 📄 <span id="license">License</span>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
