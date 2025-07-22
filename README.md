@@ -18,8 +18,8 @@ It is intended for use in environments like food production facilities, greenhou
 1. [🌍] [General Description](#general-description)  
 2. [⚙️] [Installation and Execution](#installation-and-execution)  
 3. [📊] [Module Distribution](#module-distribution)
-4. [🚀] [Results and Conclusions](#results-and-conclusions)  
-5. [🙍🏼‍♀️] [Contributors](#contributors)
+4. [🙍🏼‍♀️] [Contributors](#contributors)
+5. [📄] [License](#license)
 
 
 ---  
@@ -82,3 +82,9 @@ The project is divided in the following modules:
 
 - <a href="https://github.com/LuciaHC" target="_blank">Lucía Herraiz</a>
 - <a href="https://github.com/beaotero" target="_blank">Beatriz Otero</a>
+
+---
+
+## 📄 <span id="license">License>/span>
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
